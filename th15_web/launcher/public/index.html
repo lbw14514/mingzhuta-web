@@ -68,6 +68,7 @@
       try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
       var dbs = indexedDB.deleteDatabase('eagler-touhou-package-store-v1');
       dbs.onsuccess = finish; dbs.onerror = finish; dbs.onblocked = finish;
+      setTimeout(finish, 3000);
     }
   }());
   </script>
@@ -813,6 +814,8 @@
   <script type="module" src="app.js"></script>
 <script>
 (function(){
+  var booted=false;
+  function bootOnce(){if(booted)return;booted=true;boot();}
   function selected(){
     var s=document.querySelectorAll('[role=status]');
     for(var i=0;i<s.length;i++)if(s[i].textContent.indexOf('已选择')>=0)return true;
