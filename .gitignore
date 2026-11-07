@@ -43,3 +43,4 @@ score*.dat
 **/th15_web/tools/
 **/th10_web/tools/
 tools/architecture/python/
+!baking/th15_full.dat
