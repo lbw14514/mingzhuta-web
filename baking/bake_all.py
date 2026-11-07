@@ -166,6 +166,9 @@ def bake_anm_textures(anm: bytes, pngs: dict, tag: str):
 def main():
     a = Tha1(SRC)
     patch_pngs = {str(p.relative_to(PATCH)).replace('\\', '/'): p for p in PATCH.rglob('*.png')}
+    # 合成覆盖: MOD 图缺失元素从原版补回 (front00 难度字 EASY/NORMAL/HARD/LUNATIC/EXTRA/OVERDRIVE)
+    for _k, _v in {'front/front00.png': r'C:/touhou15-web-port/dl/front00-merged.png'}.items():
+        if pathlib.Path(_v).exists(): patch_pngs[_k] = pathlib.Path(_v)
     patch_std = {str(p.relative_to(PATCH)).replace('\\', '/'): p for p in PATCH.rglob('*.std')}
     patch_anm = {str(p.relative_to(PATCH)).replace('\\', '/'): p for p in PATCH.rglob('*.anm')}
     title_idx = next(i for i, e in enumerate(a.entries) if e['name'] == 'title.anm')
