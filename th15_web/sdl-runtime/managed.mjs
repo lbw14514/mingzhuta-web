@@ -56,6 +56,7 @@ window.addEventListener('pagehide',()=>{if(launched){core._th15_loop_stop();try{
 setInterval(()=>{if(launched&&!document.hidden)try{void save().catch(fatal);}catch(e){fatal(e);}},30000);
 const initialized=(async()=>{
  let last=performance.now(),ticks=0,presents=0,maxFrameMs=0;
+ {const probe=document.createElement('canvas');if(!probe.getContext('webgl2'))throw Error('此浏览器无法创建 WebGL2 图形环境（无可用 GPU 且软件渲染被禁用） 请使用系统 Edge 或 Chrome 打开游玩');}
  core=await createModule({canvas,printErr:console.error,onGameFrame(ok,ms,count){if(!ok){fatal(Error(err()));return;}ticks+=count;presents++;maxFrameMs=Math.max(maxFrameMs,ms);if(!first){first=true;last=performance.now();ticks=0;presents=0;maxFrameMs=0;emit('first-frame');}const now=performance.now();if(now-last>=1000){emit('frame-health',{fps:presents*1000/(now-last),simulationFps:ticks*1000/(now-last),maxGapMs:maxFrameMs});last=now;ticks=0;presents=0;maxFrameMs=0;}if(core._th15_phase()===4)void stop().catch(fatal);}});
  core.SDL3=core.SDL3||{};if(parent!==window&&parent.__touhouAudioContext)core.SDL3.audioContext=parent.__touhouAudioContext;
  window.Module=core;window.FS=core.FS;
