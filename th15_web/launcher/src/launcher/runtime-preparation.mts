@@ -7,7 +7,7 @@ interface ReadOptions {
   readObject?: ReadObject;
 }
 
-function packageDataFileId(generation: InstalledPackageGeneration) {
+export function packageDataFileId(generation: InstalledPackageGeneration) {
   const descriptor = generation?.descriptor;
   if (!descriptor?.files || !generation?.files) throw new Error("Package generation is unavailable");
   const declared = descriptor.runtimeRequirement?.dataFile;

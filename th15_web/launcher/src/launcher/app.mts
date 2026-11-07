@@ -11,6 +11,7 @@ import { componentFileIds } from "../../package/package-generation.mjs";
 import { garbageCollectPackageStore, readCurrentPackageGeneration, readPackageObject } from "../../package/package-store.mjs";
 import {
   managedRuntimeUrl,
+  packageDataFileId,
   readManagedRuntimeData,
   readManagedRuntimeResource,
 } from "./runtime-preparation.mjs";
@@ -3905,9 +3906,44 @@ async function ensureInstalledPackageRuntime(show = true) {
   } catch {
     return false;
   }
-  const generation = installed?.generation;
+  let generation = installed?.generation;
   if (!generation?.id) { activeInstalledPackageGeneration = null; return false; }
   if (needsTh08OggMigration(generation)) throw new Error("请先更新永夜抄音乐资源，再进入游戏。存档和录像会保留。");
+  // 启动前校验本地 DATA 对象尺寸 与描述符不符视为损坏 自动重装该文件 而不是死等报错
+  let dataCheck: { fileId: string; expected: number; objectId: string } | null = null;
+  try {
+    const fileId = packageDataFileId(generation);
+    const expected = Number(generation.descriptor.files[fileId]?.bytes) || 0;
+    const objectId = generation.files[fileId]?.objectId;
+    if (objectId && expected > 0) dataCheck = { fileId, expected, objectId };
+  } catch {}
+  if (dataCheck) {
+    const stored = await readPackageObject(dataCheck.objectId).catch(() => null);
+    const actual = stored?.data instanceof ArrayBuffer ? stored.data.byteLength
+      : stored?.blob instanceof Blob ? stored.blob.size : -1;
+    if (actual !== dataCheck.expected) {
+      if (!releaseCatalog?.games?.[state.game]) {
+        throw new Error(`本地游戏包损坏（${actual < 0 ? "无法读取" : actual + "/" + dataCheck.expected + " 字节"}） 且服务器发行信息不可用无法自动修复 请检查网络后重试`);
+      }
+      setPlayerStatus("检测到本地游戏包损坏 正在自动重新下载…");
+      const updated = await installPublishedPackage(state.game, {
+        catalog: releaseCatalog,
+        catalogUrl: releaseCatalogUrl,
+        addFileIds: [dataCheck.fileId],
+        forceFileIds: [dataCheck.fileId],
+        preserveLocalSource: true,
+        fetchImpl: packageTrackedFetch(state.game),
+        onProgress(progress) {
+          setPlayerStatus(`检测到本地游戏包损坏 正在自动重新下载… ${progress.completed}/${progress.total}`);
+        },
+      }).catch(error => {
+        if (isCancelledDownload(error)) throw error;
+        throw new Error(`本地游戏包损坏 自动修复失败：${errorMessage(error)}\n可稍后重试或在游戏设置里点校验游戏完整性强制重装`);
+      });
+      if (!updated.generation?.files?.[dataCheck.fileId]?.objectId) throw new Error("本地游戏包修复未完成 请稍后重试");
+      generation = updated.generation;
+    }
+  }
   installedPackageSnapshots.set(state.game, generation);
   const requestedIdentity = `package:${state.game}:${generation.id}:${state.runtimeVariant}:${state.replayViewer ? "replay" : "game"}`;
   if (state.ready && state.sourceIdentity === requestedIdentity) return true;

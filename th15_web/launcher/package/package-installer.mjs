@@ -34,6 +34,7 @@ function abortedDownloadError() {
 async function installPackageFromAcquisitionExclusive({
   descriptor,
   desiredFileIds,
+  forceFileIds = [],
   source,
   acquire,
   reuseCurrent = source === "remote",
@@ -51,10 +52,12 @@ async function installPackageFromAcquisitionExclusive({
     throw new Error("invalid Package acquisition request");
   }
 
+  const resolvedForceFileIds = typeof forceFileIds === "function" ? await forceFileIds(currentResult) : forceFileIds;
   const plan = planPackageGeneration({
     current: currentResult.generation,
     descriptor,
     desiredFileIds: resolvedDesiredFileIds,
+    forceFileIds: resolvedForceFileIds,
     generationId: generationId(),
   });
   await cancelPendingPackageGeneration(descriptor.game);
@@ -137,6 +140,7 @@ export async function installParsedPackageZip(parsed, { onProgress = null } = {}
 export async function installPackageFromRemote(descriptor, {
   descriptorUrl,
   desiredFileIds,
+  forceFileIds = [],
   source = "remote",
   fetchImpl = globalThis.fetch,
   onProgress = null,
@@ -148,6 +152,7 @@ export async function installPackageFromRemote(descriptor, {
   return installPackageFromAcquisition({
     descriptor,
     desiredFileIds,
+    forceFileIds,
     source,
     reuseCurrent: true,
     acquire: async (_fileId, declaration) => {

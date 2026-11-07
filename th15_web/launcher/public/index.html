@@ -66,8 +66,25 @@
       if (window.caches && caches.keys) caches.keys().then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); }).then(finish).catch(finish);
       else finish();
       try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
-      var dbs = indexedDB.deleteDatabase('eagler-touhou-package-store-v1');
-      dbs.onsuccess = finish; dbs.onerror = finish; dbs.onblocked = finish;
+      (function () {
+        var fin = function () { try { indexedDB.deleteDatabase('eagler-touhou-package-store-v1'); } catch (e) {} finish(); };
+        try {
+          var q = indexedDB.open('eagler-touhou-package-store-v1', 1);
+          q.onupgradeneeded = function () { var d = q.result; ['objects', 'generations', 'installations'].forEach(function (nm) { if (!d.objectStoreNames.contains(nm)) d.createObjectStore(nm); }); };
+          q.onsuccess = function () {
+            var d = q.result;
+            try {
+              var tx = d.transaction(['objects', 'generations', 'installations'], 'readwrite');
+              ['objects', 'generations', 'installations'].forEach(function (nm) { tx.objectStore(nm).clear(); });
+              tx.oncomplete = function () { d.close(); fin(); };
+              tx.onerror = function () { d.close(); fin(); };
+              tx.onabort = function () { d.close(); fin(); };
+            } catch (e) { try { d.close(); } catch (e2) {} fin(); }
+          };
+          q.onerror = fin; q.onblocked = fin;
+          setTimeout(fin, 2500);
+        } catch (e) { fin(); }
+      })();
       setTimeout(finish, 3000);
     }
   }());
@@ -907,12 +924,13 @@
         }catch(e){ok(null);}
       });}
       async function clearForRedownload(out,mbT){
-        out.textContent='检测到服务器资源更新 正在清空本地游戏包…';
+        out.textContent='检测到服务器资源更新 正在强制清空本站全部缓存数据…';
         for(const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
         for(const k of await caches.keys()) await caches.delete(k);
         await wipePackageStore();
         try{indexedDB.deleteDatabase('eagler-touhou-package-store-v1');}catch(e){}
-        out.textContent='本地游戏包已清空 刷新页面 点启动游戏将自动重新下载 约 '+mbT+' MB';
+        try{localStorage.clear();sessionStorage.clear();}catch(e){}
+        out.textContent='本站缓存数据已全部清空 页面即将刷新 点启动游戏将自动重新下载 约 '+mbT+' MB';
         setTimeout(function(){location.reload()},1500);
       }
       try{
