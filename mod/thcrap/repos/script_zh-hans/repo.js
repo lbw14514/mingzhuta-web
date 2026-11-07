@@ -1,0 +1,13 @@
+{
+	"contact": "yanscomp@outlook.com",
+	"id": "script_zh-hans",
+	"patches": {
+		"taso": "tasofro's ftg Chinese Simplfied font patch",
+		"tsa": "Used to make the STG game display the '♪' normally."
+	},
+	"servers": [
+		"https://mirrors.thpatch.net/script_zh-hans/",
+		"https://raw.githubusercontent.com/thpatch-zh/script_zh-hans/refs/heads/master/"
+	],
+	"title": "thpatch zh-hans ex-patches"
+}

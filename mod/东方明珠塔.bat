@@ -1,0 +1,1 @@
+thcrap\bin\thcrap_loader.exe zh-hans.js th15

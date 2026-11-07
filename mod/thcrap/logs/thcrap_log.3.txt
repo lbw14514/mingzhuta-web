@@ -1,0 +1,27 @@
+――――――――――――――――――――――――――――――――――――――――――――――――――
+Touhou Community Reliant Automatic Patcher logfile
+Branch: stable
+Version: 2020-04-27
+Build time: Apr 27 2020 08:45:17
+Built by: brliron
+Command line: thcrap\bin\thcrap_loader.exe  zh-hans.js th15
+――――――――――――――――――――――――――――――――――――――――――――――――――
+
+[update] Running update 0...
+[update] detect field present. Running detect test...
+[update] Detect test - checking if 'thcrap.dll' exists.
+[update] File don't exist - cancelling the update.
+[update] Update 0 done.
+[update] Running update 1...
+[update] detect field present. Running detect test...
+[update] Detect test - checking if 'config' exists.
+[update] Detect test - checking if 'logs' exists.
+[update] Detect test - checking if 'repos' exists.
+[update] Detect test - checking if 'version-resolve-installed.dat' exists.
+[update] File don't exist - cancelling the update.
+[update] Update 1 done.
+Parsing command line...
+Loading run configuration C:\Touhou Pearl Tower\thcrap\config\zh-hans.js... found
+Using exe C:\Touhou Pearl Tower\game\th15.exe
+Command-line parsing finished
+Removing plug-ins...
