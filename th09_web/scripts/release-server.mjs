@@ -80,5 +80,6 @@ export async function releaseServer({root=resolve(fileURLToPath(new URL('../site
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const at=process.argv.indexOf('--port'),port=at>=0?Number(process.argv[at+1]):3007;if(!Number.isInteger(port)||port<1||port>65535)throw Error('Invalid port');
- const {url,manifest}=await releaseServer({port});console.log(`${manifest.game} ${manifest.version} ${url}`);
+ const hi=process.argv.indexOf('--host'),host=hi>=0?process.argv[hi+1]:'127.0.0.1';
+ const {url,manifest}=await releaseServer({port,host});console.log(`${manifest.game} ${manifest.version} ${url}`);
 }
