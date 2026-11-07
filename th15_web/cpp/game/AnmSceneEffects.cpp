@@ -12,12 +12,12 @@ Vec3 radial(float angle,float radius){return {float(std::cos(double(angle))*doub
 void curve(AnmVm& vm,i32 frames,Vec3 a,Vec3 da,Vec3 b,Vec3 db){auto& p=vm.interpolators.position;p.begin(frames,8,{a.x,a.y,a.z},{b.x,b.y,b.z});p.control1={da.x,da.y,da.z};p.control2={db.x,db.y,db.z};}
 }
 AnmSceneEffects::AnmSceneEffects(AnmManager& m,Rng& g,Rng& v,i32 bank):animations(m),game(g),visual(v),effect_bank(bank),previous_create(std::move(m.effect)),previous_update(std::move(m.effect_update)),previous_interrupt(std::move(m.effect_interrupt)){
- animations.effect=[this](AnmVm& vm,i32 kind){return configure(vm,kind);};animations.effect_update=[this](AnmVm& vm,float rate){return update(vm,rate);};animations.effect_interrupt=[this](AnmVm& vm,i32 label,float rate){return interrupt(vm,label,rate);};
+ animations.effect=[this](AnmVm& vm,i32 kind){bool ok=configure(vm,kind);if(!ok)vm.error="configure kind="+std::to_string(kind)+": "+animations.error;return ok;};animations.effect_update=[this](AnmVm& vm,float rate){return update(vm,rate);};animations.effect_interrupt=[this](AnmVm& vm,i32 label,float rate){return interrupt(vm,label,rate);};
 }
 AnmSceneEffects::~AnmSceneEffects(){animations.effect=std::move(previous_create);animations.effect_update=std::move(previous_update);animations.effect_interrupt=std::move(previous_interrupt);}
 bool AnmSceneEffects::configure(AnmVm& vm,i32 kind){
  if(kind==0){vm.geometry.clear();vm.geometry.overlay=std::make_unique<AnmOverlay>();vm.geometry.allocation_bytes=0x1e30;auto& overlay=*vm.geometry.overlay;
-  vm.visual.render_flags&=~0xc0000u;vm.visual.layer=0;for(u32 i=0;i<5;i++){auto panel=std::make_unique<AnmVm>();if(!animations.bind_template(*panel,effect_bank,i<4?i32(i)+3:196)||animations.tick_instance(*panel)<0)return false;if(i<4)panel->visual.translation={320,240,0};overlay.panels[i]=std::move(panel);}
+  vm.visual.render_flags&=~0xc0000u;vm.visual.layer=0;for(u32 i=0;i<5;i++){auto panel=std::make_unique<AnmVm>();if(!animations.bind_template(*panel,effect_bank,i<4?i32(i)+3:196)||animations.tick_instance(*panel)<0){animations.error="bind_template "+std::to_string(i<4?i32(i)+3:196)+" scripts="+animations.error;return false;}if(i<4)panel->visual.translation={320,240,0};overlay.panels[i]=std::move(panel);}
   vm.visual.layer=39;vm.visual.render_flags=(vm.visual.render_flags&~0x6c0000u)|0x100000;return true;}
  if(kind==1){vm.geometry.clear();vm.geometry.gather=std::make_unique<AnmGatherEffect>();vm.geometry.gather->age.set(0);vm.geometry.allocation_bytes=0x193c;return true;}
  if(kind==3){vm.geometry.clear();vm.geometry.trail=std::make_unique<AnmTrail>();vm.geometry.trail->initialize(visual);vm.geometry.allocation_bytes=0x318;vm.visual.flags&=~0x1e0u;vm.visual.layer=19;vm.visual.render_flags=(vm.visual.render_flags&~0x80000u)|0x40000;return true;}

@@ -808,12 +808,16 @@
       if(++tries<40)setTimeout(tick,400);
     })();
   }
-  if(document.readyState==='complete')boot();
-  else window.addEventListener('load',boot);
+
   document.addEventListener('DOMContentLoaded',function(){
     var tools=document.querySelector('.tools');
     var dst=document.getElementById('drawerTools');
     if(tools&&dst)dst.appendChild(tools);
+    var card=document.querySelector('button[data-game="th15"]');
+    if(card)card.addEventListener('click',function(){
+      var d=document.getElementById('playDrawer');
+      if(d&&!d.classList.contains('open')){d.classList.add('open');d.setAttribute('aria-hidden','false');var h=document.getElementById('clickHint');if(h)h.classList.add('gone');}
+    });
     var drawer=document.getElementById('playDrawer');
     var hint=document.getElementById('clickHint');
     function openDrawer(o){
@@ -824,7 +828,9 @@
     }
     document.addEventListener('click',function(ev){
       if(ev.target.closest('button,a,select,input,label,.masthead,#gameFrame,.site-notice,[role=dialog],.play-drawer'))return;
-      openDrawer(!drawer.classList.contains('open'));
+      var opening=!drawer.classList.contains('open');
+      openDrawer(opening);
+      if(opening)bootOnce();
     });
     var c=document.getElementById('playDrawerClose');
     if(c)c.addEventListener('click',function(){openDrawer(false)});

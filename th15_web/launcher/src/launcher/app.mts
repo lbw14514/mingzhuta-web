@@ -7196,4 +7196,5 @@ animateMobileHomeCards();
 bootWatchdog?.ready?.();
 const launcherRoomRoute = !!mpNormalizeRoomCode(new URL(location.href).searchParams.get(mpRoomUrlKey));
 if (!launcherRoomRoute) void siteNotice.load();
-if (!launcherRoomRoute && !debugHarness && !touchPreview) void changelog.maybeShowAutomatically();
+// 疯狂明珠塔版 更新日志改为菜单内手动查看 不再开机自弹
+// if (!launcherRoomRoute && !debugHarness && !touchPreview) void changelog.maybeShowAutomatically();
