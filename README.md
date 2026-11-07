@@ -1,3 +1,7 @@
+# 东方明珠塔 ～ 网页版（启动器改造 fork）
+
+> 本仓库是 [Ritosa2333/th15](https://github.com/Ritosa2333/th15) 的改造分支：把启动器改造为「东方明珠塔 ～ Revenge on Poor Outlander」专属形态（全屏开屏图、抽屉式设置、品牌与文案重制），并附带 THA1 归档重打包工具链用于烘焙魔改资源。上游代码与许可说明见下文，MIT License 不变。
+
 This repo is uploaded on behalf of [@SteinsGateON](https://space.bilibili.com/34714121).
 
 # th15

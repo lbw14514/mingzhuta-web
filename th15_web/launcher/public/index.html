@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#10100f">
-  <title data-i18n="site.documentTitle">东方绀珠传网页版</title>
-  <meta name="description" content="东方绀珠传网页版，支持日文原版、触控和离线游玩。" data-i18n-content="site.description">
+  <title data-i18n="site.documentTitle">东方明珠塔网页版</title>
+  <meta name="description" content="东方明珠塔网页版，支持日文原版、触控和离线游玩。" data-i18n-content="site.description">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="EAGLER TOUHOU">
-  <meta property="og:title" content="东方绀珠传网页版" data-i18n-content="site.documentTitle">
-  <meta property="og:description" content="东方绀珠传网页版，支持日文原版、触控和离线游玩。" data-i18n-content="site.description">
+  <meta property="og:title" content="东方明珠塔网页版" data-i18n-content="site.documentTitle">
+  <meta property="og:description" content="东方明珠塔网页版，支持日文原版、触控和离线游玩。" data-i18n-content="site.description">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="EAGLER TOUHOU">
@@ -214,32 +214,42 @@
   </div>
   <div class="sheet">
     <header class="masthead">
-      <div class="brand" aria-label="绀珠传 WEB DEV"><span class="brand-eagler"><span class="brand-title">绀珠传</span><span class="brand-version">DEV</span></span><span class="brand-separator" aria-hidden="true"><span class="brand-yinyang">☯</span></span><span class="brand-title">TOUHOU</span></div>
+      <div class="brand" aria-label="明珠塔 WEB DEV"><span class="brand-eagler"><span class="brand-title">明珠塔</span><span class="brand-version">DEV</span></span><span class="brand-title">TOUHOU</span></div>
       <nav class="masthead-links" aria-label="站点信息" data-i18n-aria-label="nav.siteInfo">
-        <button class="masthead-link motion-toggle" id="lessMotionToggle" type="button" aria-pressed="false"><i aria-hidden="true"></i><span data-i18n="nav.lessMotion">更少动画</span></button>
+        <button class="masthead-link motion-toggle contract-hidden" id="lessMotionToggle" type="button" aria-pressed="false"><i aria-hidden="true"></i><span data-i18n="nav.lessMotion">更少动画</span></button>
         <a class="masthead-link" id="originMigrationOpen" href="migrate.html" hidden><span class="masthead-label"><span data-i18n="nav.oldSitePart1">存档</span><wbr><span data-i18n="nav.migrationPart2">恢复</span></span></a>
-        <a class="masthead-link" href="faq.html"><span class="masthead-label" data-i18n="nav.faq">常见问题</span></a>
         <div class="masthead-menu" id="mastheadMenu">
           <button class="masthead-link masthead-menu-toggle" id="mastheadMenuToggle" type="button" aria-label="更多" data-i18n-aria-label="nav.more" aria-expanded="false" aria-controls="mastheadMenuPanel">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5-5 5 5M7 15l5 5 5-5"/></svg>
           </button>
           <div class="masthead-menu-panel" id="mastheadMenuPanel" aria-hidden="true" inert>
             <button class="masthead-menu-item" id="siteNoticeToggle" type="button" role="switch" aria-checked="true"><svg class="masthead-menu-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2m6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg><span data-i18n="notice.label">公告</span><i class="site-notice-toggle-state" aria-hidden="true"></i></button>
-            <div class="ui-language-control masthead-menu-language"><select class="option-select ui-language-select" id="uiLanguageSelect" aria-label="界面语言" data-i18n-aria-label="ui.language" data-trigger-i18n="ui.language.menu"><option value="zh-CN" data-i18n="ui.language.zhCN">简体中文</option><option value="en" data-i18n="ui.language.en">English</option></select><template data-select-trigger-prefix><svg class="masthead-menu-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.125 21.213q-1.825-.788-3.187-2.15t-2.15-3.188T2 11.988t.788-3.875t2.15-3.175t3.187-2.15T12.013 2t3.875.788t3.175 2.15t2.15 3.175t.787 3.875t-.787 3.887t-2.15 3.188t-3.175 2.15t-3.875.787t-3.888-.787M12 19.95q.65-.9 1.125-1.875T13.9 16h-3.8q.3 1.1.775 2.075T12 19.95m-2.6-.4q-.45-.825-.787-1.713T8.05 16H5.1q.725 1.25 1.813 2.175T9.4 19.55m5.2 0q1.4-.45 2.488-1.375T18.9 16h-2.95q-.225.95-.562 1.838T14.6 19.55M4.25 14h3.4q-.075-.5-.112-.987T7.5 12t.038-1.012T7.65 10h-3.4q-.125.5-.187.988T4 12t.063 1.013t.187.987m5.4 0h4.7q.075-.5.113-.987T14.5 12t-.038-1.012T14.35 10h-4.7q-.075.5-.112.988T9.5 12t.038 1.013t.112.987m6.7 0h3.4q.125-.5.188-.987T20 12t-.062-1.012T19.75 10h-3.4q.075.5.113.988T16.5 12t-.038 1.013t-.112.987m-.4-6h2.95q-.725-1.25-1.812-2.175T14.6 4.45q.45.825.788 1.713T15.95 8M10.1 8h3.8q-.3-1.1-.775-2.075T12 4.05q-.65.9-1.125 1.875T10.1 8m-5 0h2.95q.225-.95.563-1.838T9.4 4.45Q8 4.9 6.912 5.825T5.1 8"/></svg></template></div>
             <button class="masthead-menu-item" id="changelogOpen" type="button"><svg class="masthead-menu-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21q-3.45 0-6.012-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z"/></svg><span data-i18n="nav.changelog">更新日志</span></button>
             <a class="masthead-menu-item" href="about.html"><svg class="masthead-menu-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.175 10.825Q8 9.65 8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12t-2.825-1.175M4 20v-2.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2V20z"/></svg><span data-i18n="nav.about">关于</span></a>
           </div>
         </div>
+            <div class="ui-language-control masthead-menu-language"><select class="option-select ui-language-select" id="uiLanguageSelect" aria-label="界面语言" data-i18n-aria-label="ui.language" data-trigger-i18n="ui.language.menu"><option value="zh-CN" data-i18n="ui.language.zhCN">简体中文</option><option value="en" data-i18n="ui.language.en">English</option></select><template data-select-trigger-prefix><svg class="masthead-menu-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.125 21.213q-1.825-.788-3.187-2.15t-2.15-3.188T2 11.988t.788-3.875t2.15-3.175t3.187-2.15T12.013 2t3.875.788t3.175 2.15t2.15 3.175t.787 3.875t-.787 3.887t-2.15 3.188t-3.175 2.15t-3.875.787t-3.888-.787M12 19.95q.65-.9 1.125-1.875T13.9 16h-3.8q.3 1.1.775 2.075T12 19.95m-2.6-.4q-.45-.825-.787-1.713T8.05 16H5.1q.725 1.25 1.813 2.175T9.4 19.55m5.2 0q1.4-.45 2.488-1.375T18.9 16h-2.95q-.225.95-.562 1.838T14.6 19.55M4.25 14h3.4q-.075-.5-.112-.987T7.5 12t.038-1.012T7.65 10h-3.4q-.125.5-.187.988T4 12t.063 1.013t.187.987m5.4 0h4.7q.075-.5.113-.987T14.5 12t-.038-1.012T14.35 10h-4.7q-.075.5-.112.988T9.5 12t.038 1.013t.112.987m6.7 0h3.4q.125-.5.188-.987T20 12t-.062-1.012T19.75 10h-3.4q.075.5.113.988T16.5 12t-.038 1.013t-.112.987m-.4-6h2.95q-.725-1.25-1.812-2.175T14.6 4.45q.45.825.788 1.713T15.95 8M10.1 8h3.8q-.3-1.1-.775-2.075T12 4.05q-.65.9-1.125 1.875T10.1 8m-5 0h2.95q.225-.95.563-1.838T9.4 4.45Q8 4.9 6.912 5.825T5.1 8"/></svg></template></div>
+        <a class="masthead-link" href="about.html"><span class="masthead-label" data-i18n="nav.about">关于</span></a>
       </nav>
     </header>
     <main class="main" id="main">
+    <div class="click-hint" id="clickHint">点击任意位置开始游戏</div>
+    <aside class="play-drawer" id="playDrawer" aria-hidden="true">
+      <button class="play-drawer-close" id="playDrawerClose" type="button" aria-label="关闭">×</button>
+      <div>
+        <div class="play-drawer-overline">东方明珠塔 ～ REVENGE ON POOR OUTLANDER</div>
+        <div class="play-drawer-title">游戏设置</div>
+      </div>
+      <div class="drawer-tools" id="drawerTools"></div>
+      <div class="drawer-note">首次启动需校验并安装游戏包 约 130 MB 完成后即可离线游玩 底部按钮开始游戏或导入存档</div>
+    </aside>
 <button class="game game-th15" data-game="th15" type="button">
-        <span class="card-art" aria-hidden="true"><img class="card-art-image" src="assets/th15-card.png" alt=""><span class="card-art-shade"></span></span>
-        <span class="card-glow" aria-hidden="true"><img class="card-art-image" src="assets/th15-card.png" alt=""></span>
+        
+        
         <div class="no"><span class="no-label">15</span></div>
-        <div class="game-copy"><h2><span class="game-title"><span>東方</span><wbr><span>绀珠传</span></span></h2><small>Legacy of Lunatic Kingdom</small>
+        <div class="game-copy"><h2><span class="game-title"><span>東方</span><wbr><span>明珠塔</span></span></h2><small>Revenge on Poor Outlander</small>
         </div>
-        <span class="rail-title"><strong>東方绀珠传</strong> ~ Legacy of Lunatic Kingdom</span>
+        <span class="rail-title"><strong>東方明珠塔</strong> ~ Revenge on Poor Outlander</span>
       </button>
       
       
@@ -782,5 +792,55 @@
   <script>window.__eaglerBoot && window.__eaglerBoot.mark("app-module-request");</script>
   <script src="native-audio.js"></script>
   <script type="module" src="app.js"></script>
+<script>
+(function(){
+  function selected(){
+    var s=document.querySelectorAll('[role=status]');
+    for(var i=0;i<s.length;i++)if(s[i].textContent.indexOf('已选择')>=0)return true;
+    return false;
+  }
+  function boot(){
+    var tries=0;
+    (function tick(){
+      if(selected())return;
+      var b=document.querySelector('button[data-game="th15"]');
+      if(b)b.click();
+      if(++tries<40)setTimeout(tick,400);
+    })();
+  }
+  if(document.readyState==='complete')boot();
+  else window.addEventListener('load',boot);
+  document.addEventListener('DOMContentLoaded',function(){
+    var tools=document.querySelector('.tools');
+    var dst=document.getElementById('drawerTools');
+    if(tools&&dst)dst.appendChild(tools);
+    var drawer=document.getElementById('playDrawer');
+    var hint=document.getElementById('clickHint');
+    function openDrawer(o){
+      if(!drawer)return;
+      drawer.classList.toggle('open',o);
+      drawer.setAttribute('aria-hidden',o?'false':'true');
+      if(hint&&o)hint.classList.add('gone');
+    }
+    document.addEventListener('click',function(ev){
+      if(ev.target.closest('button,a,select,input,label,.masthead,#gameFrame,.site-notice,[role=dialog],.play-drawer'))return;
+      openDrawer(!drawer.classList.contains('open'));
+    });
+    var c=document.getElementById('playDrawerClose');
+    if(c)c.addEventListener('click',function(){openDrawer(false)});
+    document.addEventListener('keydown',function(ev){if(ev.key==='Escape')openDrawer(false)});
+    var m=document.getElementById('megaLaunch');
+    if(!m)return;
+    m.addEventListener('click',function(){
+      var l=document.getElementById('launch');
+      if(l)l.click();
+    });
+    setInterval(function(){
+      var l=document.getElementById('launch');
+      if(l)m.disabled=!!l.disabled;
+    },400);
+  });
+}());
+</script>
 </body>
 </html>

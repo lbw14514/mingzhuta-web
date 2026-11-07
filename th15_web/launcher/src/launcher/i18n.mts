@@ -6,8 +6,8 @@ type UiMessageEntry = readonly [key: string, zhCN: string, english: string];
 // One tuple owns both translations, so a new key cannot silently exist in only
 // one locale. Keys describe meaning rather than copying the Chinese source.
 const entries = [
-  ["site.documentTitle", "东方绀珠传网页版", "Touhou 15: Legacy of Lunatic Kingdom — Web"],
-  ["site.description", "东方绀珠传网页版，支持日文原版、触控和离线游玩。", "Touhou 15 in the browser, with Japanese, touch controls and offline play."],
+  ["site.documentTitle", "东方明珠塔网页版", "Touhou Pearl Tower — Web"],
+  ["site.description", "东方明珠塔网页版，支持日文原版、触控和离线游玩。", "Touhou Pearl Tower in the browser, with Japanese, touch controls and offline play."],
   ["filter.aria", "游戏分类", "Game categories"],
   ["filter.all", "全部", "All"],
   ["filter.original", "原版", "Original"],

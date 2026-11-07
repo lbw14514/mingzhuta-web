@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@alexaltea/unicorn-js": "2.1.4",
-    "koffi": "3.2.1",
+    "koffi": "^3.2.1",
     "playwright": "1.60.0",
     "spessasynth_core": "4.3.22",
     "v86": "0.5.458",

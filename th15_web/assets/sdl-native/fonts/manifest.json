@@ -1,9 +1,9 @@
 {
   "format": "T15G-v3",
   "source": "TH15 1.00b original 46f6a0 CreateFontA parameters (quality 2); offline GDI ARGB4444 coverage",
+  "defaultFallback": false,
   "fonts": [
     {
-      "handle": 100,
       "parameters": [
         24,
         0,
@@ -19,12 +19,10 @@
         2,
         17
       ],
-      "faceBytes": "826c827220835383568362834e",
       "face": "ＭＳ ゴシック",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 101,
       "parameters": [
         28,
         0,
@@ -40,12 +38,10 @@
         2,
         17
       ],
-      "faceBytes": "826c827220835383568362834e",
       "face": "ＭＳ ゴシック",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 102,
       "parameters": [
         32,
         0,
@@ -61,12 +57,10 @@
         2,
         17
       ],
-      "faceBytes": "826c827220835383568362834e",
       "face": "ＭＳ ゴシック",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 103,
       "parameters": [
         40,
         0,
@@ -82,12 +76,10 @@
         2,
         17
       ],
-      "faceBytes": "826c827220835383568362834e",
       "face": "ＭＳ ゴシック",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 104,
       "parameters": [
         32,
         0,
@@ -103,12 +95,10 @@
         2,
         17
       ],
-      "faceBytes": "826c82722096be92a9",
       "face": "ＭＳ 明朝",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 105,
       "parameters": [
         40,
         0,
@@ -124,12 +114,10 @@
         2,
         17
       ],
-      "faceBytes": "826c82722096be92a9",
       "face": "ＭＳ 明朝",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 106,
       "parameters": [
         15,
         0,
@@ -145,12 +133,10 @@
         2,
         17
       ],
-      "faceBytes": "826c827220835383568362834e",
       "face": "ＭＳ ゴシック",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 107,
       "parameters": [
         15,
         0,
@@ -166,12 +152,10 @@
         2,
         17
       ],
-      "faceBytes": "826c82722096be92a9",
       "face": "ＭＳ 明朝",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 110,
       "parameters": [
         36,
         0,
@@ -187,12 +171,10 @@
         2,
         1
       ],
-      "faceBytes": "83818343838a8349",
       "face": "メイリオ",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 111,
       "parameters": [
         42,
         0,
@@ -208,12 +190,10 @@
         2,
         1
       ],
-      "faceBytes": "83818343838a8349",
       "face": "メイリオ",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 112,
       "parameters": [
         48,
         0,
@@ -229,12 +209,10 @@
         2,
         1
       ],
-      "faceBytes": "83818343838a8349",
       "face": "メイリオ",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 113,
       "parameters": [
         60,
         0,
@@ -250,12 +228,10 @@
         2,
         1
       ],
-      "faceBytes": "83818343838a8349",
       "face": "メイリオ",
       "selectedFace": "MS Gothic"
     },
     {
-      "handle": 116,
       "parameters": [
         16,
         0,
@@ -271,7 +247,6 @@
         2,
         1
       ],
-      "faceBytes": "83818343838a8349",
       "face": "メイリオ",
       "selectedFace": "MS Gothic"
     }
@@ -302,12 +277,12 @@
         7,
         11,
         5,
-        12,
         7,
         9
       ]
     }
   ],
+  "coverageBits": 3,
   "coverageClasses": 7,
   "fontSources": [
     {
@@ -391,7 +366,5 @@
       "bytes": 2044086,
       "sha256": "83fe50d57a2a966baca3d64a175cb9fb8581fbc296ff6167e0a6b649e6690ea3"
     }
-  ],
-  "coverageBits": 3,
-  "defaultFallback": false
+  ]
 }

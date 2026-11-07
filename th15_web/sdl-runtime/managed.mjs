@@ -35,7 +35,7 @@ case 'write':{
  if(launched)throw Error('请先退出游戏');const target=path(m.path),bytes=new Uint8Array(m.bytes||[]);
  if(!bytes.length||bytes.length>(target.startsWith('autosave/')?100*1024*1024+96:64*1024*1024))throw Error('文件大小无效');
  const p=core._malloc(bytes.length);if(!p)throw Error('文件导入内存不足');let valid=false;try{core.HEAPU8.set(bytes,p);valid=!!core._th15_validate_file(target==='scoreth15.dat'?0:target==='th15.cfg'?2:target.startsWith('autosave/')?3:1,p,bytes.length);}finally{core._free(p);}
- if(!valid)throw Error('文件不是有效的绀珠传存档或录像');if(target.startsWith('autosave/')){const parts=/save([0-3])_([0-4])/.exec(target),header=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);if(header.getInt32(16,true)!==Number(parts[1])||header.getInt32(20,true)!==Number(parts[2])||header.getInt32(24,true)<1||header.getInt32(24,true)>7)throw Error('章节存档与角色、难度不一致');}core.FS.writeFile('/savesth15/'+target,bytes);await sync();return {};
+ if(!valid)throw Error('文件不是有效的明珠塔存档或录像');if(target.startsWith('autosave/')){const parts=/save([0-3])_([0-4])/.exec(target),header=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);if(header.getInt32(16,true)!==Number(parts[1])||header.getInt32(20,true)!==Number(parts[2])||header.getInt32(24,true)<1||header.getInt32(24,true)>7)throw Error('章节存档与角色、难度不一致');}core.FS.writeFile('/savesth15/'+target,bytes);await sync();return {};
 }
 case 'remove':if(launched)throw Error('请先退出游戏');core.FS.unlink('/savesth15/'+path(m.path));await sync();return {};
 default:throw Error('不支持的操作');}}

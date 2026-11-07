@@ -14,7 +14,7 @@ export function languagePriority(id: string): number {
 
 export const PRODUCT_GAMES = Object.freeze({
   th15: Object.freeze({
-    number:"15",title:"東方紺珠伝",subtitle:"Legacy of Lunatic Kingdom",
+    number:"15",title:"東方明珠塔",subtitle:"Revenge on Poor Outlander",
     storage:Object.freeze({saveRoot:"/savesth15",scoreFile:"scoreth15.dat",configFiles:Object.freeze(["th15.cfg"])}),
     runtime:"./runtime/th15/th15.html",dataProvider:"emscripten-preload",
     package:Object.freeze({dataFileId:"game-data",dataTarget:"/th15.data",musicSourceDirectories:Object.freeze({wav:"music"}),musicMounts:Object.freeze({wav:"/music"})}),

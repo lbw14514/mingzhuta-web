@@ -9,7 +9,7 @@ const development=process.argv.includes('--development');
 const release=JSON.parse(readFileSync(resolve(root,'reference/web-release.json'),'utf8'));
 if(!/^\d+\.\d+\.\d+$/.test(release.version)||!/^\d{4}-\d{2}-\d{2}$/.test(release.date))throw Error('Invalid web release version/date');
 const changelog=readFileSync(resolve(root,'CHANGELOG.txt'),'utf8');
-if(!changelog.startsWith(`[${release.date}] 绀珠传 WEB ${release.version}\n`))throw Error('Changelog does not match web release version/date');
+if(!changelog.startsWith(`[${release.date}] 明珠塔 WEB ${release.version}\n`))throw Error('Changelog does not match web release version/date');
 if(!development&&!build.completeGame)throw Error('TH15 full reconstruction is incomplete. Final/public packaging is blocked; use --development for the isolated local architecture preview.');
 const out=development?resolve(root,'artifacts/architecture-preview'):source,site=resolve(out,'site');
 const sha=b=>createHash('sha256').update(b).digest('hex'),walk=p=>readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(resolve(p,e.name)):[resolve(p,e.name)]);
@@ -31,7 +31,7 @@ function json(name,v){put(name,Buffer.from(JSON.stringify(v)));}
 const pending=['app.js','native-audio.js'],seen=new Set();function locate(n){for(const p of [resolve(launcher,'public',n),resolve(launcher,'.cache/build/browser',n),resolve(launcher,'src/browser-facades',n),resolve(launcher,n)])if(existsSync(p))return p;throw Error('Missing module '+n);}
 while(pending.length){const n=pending.pop();if(seen.has(n))continue;if(n.startsWith('../'))throw Error('Import escape');seen.add(n);const text=readFileSync(locate(n),'utf8');if(/(?:from\s*|import\s*\()['"]node:/.test(text))throw Error('Node module');put(n,Buffer.from(text));for(const m of text.matchAll(/(?:\b(?:import|export)\s+(?:[^'";]*?\s+from\s+)?|\bimport\s*\()\s*['"](\.[^'"]+)['"]/g))pending.push(relative(site,resolve(site,dirname(n),m[1])).replaceAll('\\','/'));}
 for(const p of walk(resolve(launcher,'public'))){const n=relative(resolve(launcher,'public'),p).replaceAll('\\','/');if(!/\.(js|mjs)$/.test(n)||n.startsWith('vendor/')){
- if(n==='index.html'&&!development)put(n,Buffer.from(readFileSync(p,'utf8').replace('绀珠传 WEB DEV',`绀珠传 WEB ${release.version}（${release.date}）`).replace('<span class="brand-version">DEV</span>',`<span class="brand-version" title="${release.date} 发布">${release.version}</span>`)));else copy(n,p);
+ if(n==='index.html'&&!development)put(n,Buffer.from(readFileSync(p,'utf8').replace('明珠塔 WEB DEV',`明珠塔 WEB ${release.version}（${release.date}）`).replace('<span class="brand-version">DEV</span>',`<span class="brand-version" title="${release.date} 发布">${release.version}</span>`)));else copy(n,p);
 }}
 for(const [name,src] of [['th15.html','managed.html'],['managed.css','managed.css'],['keyboard.mjs','keyboard.mjs']])copy('runtime/th15/'+name,resolve(root,'sdl-runtime',src));
 const buildMarker="/*TH15_BUILD_INFO*/{version:'development-incomplete',completeGame:false}",managed=readFileSync(resolve(root,'sdl-runtime/managed.mjs'),'utf8');
@@ -52,10 +52,10 @@ const layout='sha256-'+sha(JSON.stringify(index)),revision='th15-'+sha(JSON.stri
 json('packages/th15/package.json',{schema:'eagler-touhou/package/1',game:'th15',revision,files:declarations,base:{files:Object.keys(declarations)},components:{},runtimeRequirement:{protocol:'eagler-touhou/1',target:'th15',dataFile:'game-data',dataLayout:layout}});
 json('release-catalog.json',{schema:'eagler-touhou/release-catalog/1',games:{th15:{revision,descriptor:'./packages/th15/package.json'}}});
 json('host-manifest.json',{schema:'eagler-touhou/host-manifest/1',protocol:'eagler-touhou/1',profile:'th15-sdl3-native',shared:{resourceMode:'hosted',vanillaFont:'',unicodeFont:''},games:{th15:{runtime:'./runtime/th15/th15.html',gameData:{path:'th15.data',bytes:size,sha256:sha(data),version:'sha256-'+sha(data),layout},music:{midi:{files:[]}},languageOptions:[{id:'ja',title:'日本語（原版）',pack:null}],features:{thprac:false,focusHitbox:false}}}});
-copy('LICENSE-launcher.txt',resolve(launcher,'LICENSE'));put('THIRD-PARTY-NOTICES.txt',Buffer.from('Original game and assets: Team Shanghai Alice / ZUN.\nLauncher: YomotsuHisami/eagler-touhou, GPL-3.0-or-later, adapted from the local final TH08/TH10/TH09 launcher. See LICENSE-launcher.txt.\nSDL3: zlib. Emscripten: MIT / University of Illinois-NCSA.\n'));
+copy('LICENSE-launcher.txt',resolve(launcher,'LICENSE'));put('THIRD-PARTY-NOTICES.txt',Buffer.from('Original game and assets: Team Shanghai Alice / ZUN.\n东方明珠塔 MOD (dialogue/art/music overlay): fan mod of Touhou 15 by 天津THO组织委员会 / @冰川寒焰 and contributors.\nLauncher: YomotsuHisami/eagler-touhou, GPL-3.0-or-later, adapted from the local final TH08/TH10/TH09 launcher. See LICENSE-launcher.txt.\nSDL3: zlib. Emscripten: MIT / University of Illinois-NCSA.\n'));
 copy('final-baseline.json',resolve(root,'reference/architecture-baseline.json'));
 copy('shared-architecture-extensions.json',resolve(root,'reference/shared-architecture-extensions.json'));
-put('app/th15.html',Buffer.from('<!doctype html><meta charset="utf-8"><title>东方绀珠传</title><script src="/app/redirect.mjs" type="module"></script><a href="/">打开绀珠传</a>'));
+put('app/th15.html',Buffer.from('<!doctype html><meta charset="utf-8"><title>东方明珠塔</title><script src="/app/redirect.mjs" type="module"></script><a href="/">打开明珠塔</a>'));
 put('app/redirect.mjs',Buffer.from('location.replace(new URL("/",location.href));'));
 put('CHANGELOG.txt',Buffer.from((development?'开发验证构建 · 仅供本地验证\n\n':'')+changelog));
 const entries=[{url:'./',revision:manifest.files['/index.html'].sha256},...Object.keys(manifest.files).map(n=>n.slice(1)).filter(n=>!n.startsWith('packages/')&&!['app-shell-sw.js','index.html','version.json'].includes(n)).map(n=>({url:n,revision:manifest.files['/'+n].sha256}))];
