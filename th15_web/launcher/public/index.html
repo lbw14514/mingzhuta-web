@@ -857,17 +857,47 @@
     var vr=document.getElementById('verifyIntegrity');
     if(vr)vr.addEventListener('click',async function(){
       var out=document.getElementById('verifyResult');
-      vr.disabled=true;out.textContent='校验中 正在流式读取 128 MB 游戏包…';
+      vr.disabled=true;
+      var K=new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+      function initH(){return new Uint32Array([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19]);}
+      function compress(H,block){
+        var w=new Uint32Array(64);
+        for(var i=0;i<16;i++)w[i]=(block[i*4]<<24)|(block[i*4+1]<<16)|(block[i*4+2]<<8)|block[i*4+3];
+        for(var i=16;i<64;i++){var s0=((w[i-15]>>>7)|(w[i-15]<<25))^((w[i-15]>>>18)|(w[i-15]<<14))^(w[i-15]>>>3);var s1=((w[i-2]>>>17)|(w[i-2]<<15))^((w[i-2]>>>19)|(w[i-2]<<13))^(w[i-2]>>>10);w[i]=(w[i-16]+s0+w[i-7]+s1)|0;}
+        var a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+        for(var i=0;i<64;i++){var S1=(e>>>6|e<<26)^(e>>>11|e<<21)^(e>>>25|e<<7);var ch=(e&f)^(~e&g);var t1=(h+S1+ch+K[i]+w[i])|0;var S0=(a>>>2|a<<30)^(a>>>13|a<<19)^(a>>>22|a<<10);var maj=(a&b)^(a&c)^(b&c);var t2=(S0+maj)|0;h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0;}
+        H[0]=(H[0]+a)|0;H[1]=(H[1]+b)|0;H[2]=(H[2]+c)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0;
+      }
+      function shaNew(){return {H:initH(),buf:new Uint8Array(64),bl:0,total:0};}
+      function shaUpd(st,bytes){st.total+=bytes.length;for(var i=0;i<bytes.length;){var take=Math.min(bytes.length-i,64-st.bl);st.buf.set(bytes.subarray(i,i+take),st.bl);st.bl+=take;i+=take;if(st.bl===64){compress(st.H,st.buf);st.bl=0;}}}
+      function shaFin(st){
+        var bitLen=st.total*8;var pad=[0x80];
+        var zeros=((55-st.total%64)+64)%64;
+        var tail=new Uint8Array(1+zeros+8);tail[0]=0x80;
+        var hv=bitLen;for(var i=0;i<8;i++)tail[tail.length-1-i]=Math.floor(hv/Math.pow(2,8*i))&255;
+        shaUpd(st,tail);
+        var hex='';for(var i=0;i<8;i++)hex+=(st.H[i]>>>0).toString(16).padStart(8,'0');
+        return hex;
+      }
       try{
         var desc=await (await fetch('/packages/th15/package.json',{cache:'no-store'})).json();
         var gd=desc.files['game-data'];
-        out.textContent='校验中 正在读取 '+Math.round(gd.bytes/1048576)+' MB…';
-        var buf=await (await fetch('/packages/th15/th15.data',{cache:'no-store'})).arrayBuffer();
-        var digest=await crypto.subtle.digest('SHA-256',buf);
-        var hex=[...new Uint8Array(digest)].map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+        var resp=await fetch('/packages/th15/th15.data',{cache:'no-store'});
+        if(!resp.ok)throw new Error('HTTP '+resp.status);
+        var reader=resp.body.getReader();
+        var st=shaNew();var got=0;var lastPct=-1;
+        while(true){
+          var r=await reader.read();
+          if(r.done)break;
+          shaUpd(st,r.value);got+=r.value.length;
+          var pct=Math.round(gd.bytes/1048576);
+          var cur=Math.round(got/1048576);
+          if(cur!==lastPct){lastPct=cur;out.textContent='校验中 '+cur+' / '+pct+' MB…';}
+        }
+        var hex=shaFin(st);
         var expect=gd.revision.replace(/^sha256-/,'');
-        if(hex===expect&&buf.byteLength===gd.bytes){
-          out.textContent='校验通过 SHA-256 与服务器清单一致 ('+Math.round(gd.bytes/1048576)+' MB)';
+        if(hex===expect&&got===gd.bytes){
+          out.textContent='校验通过 SHA-256 与服务器清单一致 ('+Math.round(got/1048576)+' MB)';
         }else{
           out.textContent='检测到文件不一致 正在重新下载…';
           for(const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
