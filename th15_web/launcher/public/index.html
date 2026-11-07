@@ -879,9 +879,47 @@
         var hex='';for(var i=0;i<8;i++)hex+=(st.H[i]>>>0).toString(16).padStart(8,'0');
         return hex;
       }
+      function wipePackageStore(){return new Promise(function(ok){
+        var q=indexedDB.open('eagler-touhou-package-store-v1',1);
+        q.onupgradeneeded=function(){var d=q.result;['objects','generations','installations'].forEach(function(n){if(!d.objectStoreNames.contains(n))d.createObjectStore(n);});};
+        q.onsuccess=function(){try{var d=q.result;var tx=d.transaction(['objects','generations','installations'],'readwrite');tx.objectStore('objects').clear();tx.objectStore('generations').clear();tx.objectStore('installations').clear();tx.oncomplete=function(){d.close();ok();};tx.onerror=function(){d.close();ok();};tx.onabort=function(){d.close();ok();};}catch(e){ok();}};
+        q.onerror=function(){ok();};q.onblocked=function(){ok();};
+      });}
+      function storeRevision(){return new Promise(function(ok){
+        try{
+          var q=indexedDB.open('eagler-touhou-package-store-v1',1);
+          q.onupgradeneeded=function(){var d=q.result;['objects','generations','installations'].forEach(function(n){if(!d.objectStoreNames.contains(n))d.createObjectStore(n);});};
+          q.onsuccess=function(){
+            var d=q.result;
+            try{
+              if(![].slice.call(d.objectStoreNames).includes('generations')){d.close();ok(null);return;}
+              var tx=d.transaction('generations','readonly');
+              var rq=tx.objectStore('generations').getAll();
+              rq.onsuccess=function(){
+                var rev=null;
+                (rq.result||[]).forEach(function(g){var f=g&&g.descriptor&&g.descriptor.files&&g.descriptor.files['game-data'];if(g&&g.descriptor&&g.descriptor.game==='th15'&&f&&f.revision)rev=f.revision;});
+                d.close();ok(rev);
+              };
+              rq.onerror=function(){d.close();ok(null);};
+            }catch(e){try{d.close();}catch(_e){}ok(null);}
+          };
+          q.onerror=function(){ok(null);};q.onblocked=function(){ok(null);};
+        }catch(e){ok(null);}
+      });}
+      async function clearForRedownload(out,mbT){
+        out.textContent='检测到服务器资源更新 正在清空本地游戏包…';
+        for(const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+        for(const k of await caches.keys()) await caches.delete(k);
+        await wipePackageStore();
+        try{indexedDB.deleteDatabase('eagler-touhou-package-store-v1');}catch(e){}
+        out.textContent='本地游戏包已清空 刷新页面 点启动游戏将自动重新下载 约 '+mbT+' MB';
+        setTimeout(function(){location.reload()},1500);
+      }
       try{
         var desc=await (await fetch('/packages/th15/package.json',{cache:'no-store'})).json();
         var gd=desc.files['game-data'];
+        var mbT=Math.max(1,Math.round(gd.bytes/1048576));
+        out.textContent='正在从服务器读取清单与游戏包…';
         var resp=await fetch('/packages/th15/th15.data',{cache:'no-store'});
         if(!resp.ok)throw new Error('HTTP '+resp.status);
         var reader=resp.body.getReader();
@@ -890,19 +928,25 @@
           var r=await reader.read();
           if(r.done)break;
           shaUpd(st,r.value);got+=r.value.length;
-          var pct=Math.round(gd.bytes/1048576);
+          var pct=Math.min(100,Math.floor(got*100/gd.bytes));
           var cur=Math.round(got/1048576);
-          if(cur!==lastPct){lastPct=cur;out.textContent='校验中 '+cur+' / '+pct+' MB…';}
+          if(cur!==lastPct){lastPct=cur;out.textContent='校验中 '+cur+' / '+mbT+' MB（'+pct+'%）…';}
         }
         var hex=shaFin(st);
         var expect=gd.revision.replace(/^sha256-/,'');
         if(hex===expect&&got===gd.bytes){
-          out.textContent='校验通过 SHA-256 与服务器清单一致 ('+Math.round(got/1048576)+' MB)';
+          var localRev=await storeRevision();
+          if(localRev&&localRev!==gd.revision){
+            out.textContent='检测到服务器资源更新（本地版本较旧）';
+            await clearForRedownload(out,mbT);
+            return;
+          }
+          out.textContent='校验通过 本地与服务器一致（'+mbT+' MB）';
+          vr.disabled=false;
         }else{
-          out.textContent='检测到文件不一致 正在重新下载…';
-          for(const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
-          for(const k of await caches.keys()) await caches.delete(k);
-          setTimeout(function(){location.reload()},1200);
+          out.textContent='服务器文件与服务器清单不一致（已下载 '+Math.round(got/1048576)+' MB / 清单 '+mbT+' MB）';
+          await clearForRedownload(out,mbT);
+          return;
         }
       }catch(e){out.textContent='校验失败 '+String(e).slice(0,80);vr.disabled=false;}
     });
