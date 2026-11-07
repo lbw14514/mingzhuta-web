@@ -241,6 +241,10 @@
         <div class="play-drawer-title">游戏设置</div>
       </div>
       <div class="drawer-tools" id="drawerTools"></div>
+      <div class="drawer-verify">
+        <button class="drawer-verify-btn" id="verifyIntegrity" type="button">校验游戏完整性</button>
+        <div class="drawer-verify-result" id="verifyResult">对比服务器清单的 SHA-256 文件有更新会自动重算</div>
+      </div>
       <div class="drawer-note">首次启动需校验并安装游戏包 约 130 MB 完成后即可离线游玩 底部按钮开始游戏或导入存档</div>
     </aside>
 <button class="game game-th15" data-game="th15" type="button">
@@ -831,6 +835,28 @@
       var opening=!drawer.classList.contains('open');
       openDrawer(opening);
       if(opening)bootOnce();
+    });
+    var vr=document.getElementById('verifyIntegrity');
+    if(vr)vr.addEventListener('click',async function(){
+      var out=document.getElementById('verifyResult');
+      vr.disabled=true;out.textContent='校验中 正在流式读取 128 MB 游戏包…';
+      try{
+        var desc=await (await fetch('/packages/th15/package.json',{cache:'no-store'})).json();
+        var gd=desc.files['game-data'];
+        out.textContent='校验中 正在读取 '+Math.round(gd.bytes/1048576)+' MB…';
+        var buf=await (await fetch('/packages/th15/th15.data',{cache:'no-store'})).arrayBuffer();
+        var digest=await crypto.subtle.digest('SHA-256',buf);
+        var hex=[...new Uint8Array(digest)].map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+        var expect=gd.revision.replace(/^sha256-/,'');
+        if(hex===expect&&buf.byteLength===gd.bytes){
+          out.textContent='校验通过 SHA-256 与服务器清单一致 ('+Math.round(gd.bytes/1048576)+' MB)';
+        }else{
+          out.textContent='检测到文件不一致 正在重新下载…';
+          for(const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+          for(const k of await caches.keys()) await caches.delete(k);
+          setTimeout(function(){location.reload()},1200);
+        }
+      }catch(e){out.textContent='校验失败 '+String(e).slice(0,80);vr.disabled=false;}
     });
     var c=document.getElementById('playDrawerClose');
     if(c)c.addEventListener('click',function(){openDrawer(false)});

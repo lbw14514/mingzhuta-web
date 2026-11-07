@@ -658,3 +658,8 @@ body.player-active .play-drawer{transform:translateX(112%)!important}
 .tools{display:none!important}
 .contract-hidden{display:none!important}
 #changelogConfirm{position:relative;z-index:6}
+.drawer-verify{display:grid;gap:6px}
+.drawer-verify-btn{justify-self:start;padding:8px 16px;border:1px solid rgba(255,255,255,.3);border-radius:10px;background:transparent;color:#eee;cursor:pointer;font:700 12px/1 var(--ui-font);letter-spacing:.08em;transition:background-color .15s ease,color .15s ease}
+.drawer-verify-btn:hover{background:#fff;color:#141413}
+.drawer-verify-btn:disabled{opacity:.5;cursor:default}
+.drawer-verify-result{color:rgba(255,255,255,.55);font:400 11px/1.6 var(--ui-font);letter-spacing:.02em}
