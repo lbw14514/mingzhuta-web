@@ -843,7 +843,14 @@
     });
     setInterval(function(){
       var l=document.getElementById('launch');
-      if(l)m.disabled=!!l.disabled;
+      var t=document.querySelector('.tools');
+      var mn=document.getElementById('main');
+      var b=document.getElementById('gameDataImportBusy');
+      var busy=b&&!b.hidden;
+      if(l&&!l.disabled&&!busy){
+        if(t&&t.inert)t.inert=false;
+        if(mn&&mn.inert)mn.inert=false;
+      }
     },400);
   });
 }());

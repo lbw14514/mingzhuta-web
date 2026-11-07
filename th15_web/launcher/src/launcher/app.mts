@@ -3204,16 +3204,8 @@ function render() {
   tools.setAttribute("aria-hidden", String(!state.hasSelection));
   if (toolsInteractionFrame !== null) cancelAnimationFrame(toolsInteractionFrame);
   toolsInteractionFrame = null;
-  if (!state.hasSelection) tools.inert = true;
-  else if (tools.inert) {
-    // Re-enable after the collapsed panel has entered the visible layout.
-    // An immediate clear during iframe teardown can leave Chrome's hit-test
-    // subtree inert even though the DOM property and accessibility tree changed.
-    toolsInteractionFrame = requestAnimationFrame(() => {
-      toolsInteractionFrame = null;
-      if (state.hasSelection) tools.inert = false;
-    });
-  }
+  // 疯狂明珠塔版 工具栏常驻抽屉内 永不置 inert
+  tools.inert = false;
   document.querySelectorAll<HTMLElement>(".game").forEach(card => {
     const candidate = card.dataset.product || card.dataset.game || "";
     if (!isProductId(candidate)) return;
