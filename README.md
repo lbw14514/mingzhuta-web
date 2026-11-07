@@ -2,6 +2,19 @@
 
 > 本仓库是 [Ritosa2333/th15](https://github.com/Ritosa2333/th15) 的改造分支：把启动器改造为「东方明珠塔 ～ Revenge on Poor Outlander」专属形态（全屏开屏图、抽屉式设置、品牌与文案重制），并附带 THA1 归档重打包工具链用于烘焙魔改资源。上游代码与许可说明见下文，MIT License 不变。
 
+
+## 运行所需与获取
+
+本仓库只含源码 不含任何游戏数据 运行与构建需自备以下输入
+
+| 输入 | 说明 |
+| --- | --- |
+| 日文原版 东方绀珠传 1.00b | th15.exe th15.dat thbgm.dat 官方渠道为同人即卖会与委托店铺 无官方数字版 |
+| 东方明珠塔 MOD | 基于 thcrap 的魔改整合包 由 天津THO组织委员会 与 @冰川寒焰 发行 暂无公开直链 请通过魔改组或活动渠道获取 |
+| 在线体验原版 | [touhou.vip](https://touhou.vip/) EAGLER TOUHOU 网页版 |
+
+构建工具链见下文 Node.js 22+ Python 3 emsdk 由 tools/download-emscripten.py 拉取
+
 This repo is uploaded on behalf of [@SteinsGateON](https://space.bilibili.com/34714121).
 
 # th15
