@@ -57,6 +57,21 @@
     }
   </style>
   <script>
+  (function(){
+    if (location.search.indexOf('reset=1') >= 0) {
+      var n = 0;
+      var finish = function () { n++; if (n >= 3) { location.replace('/'); } };
+      if (navigator.serviceWorker) navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); finish(); }).catch(finish);
+      else finish();
+      if (window.caches && caches.keys) caches.keys().then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); }).then(finish).catch(finish);
+      else finish();
+      try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
+      var dbs = indexedDB.deleteDatabase('eagler-touhou-package-store-v1');
+      dbs.onsuccess = finish; dbs.onerror = finish; dbs.onblocked = finish;
+    }
+  }());
+  </script>
+  <script>
   (function () {
     var startedAt = Date.now();
     var watchdog = null;
