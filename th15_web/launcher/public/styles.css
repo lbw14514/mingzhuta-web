@@ -646,7 +646,7 @@ body.mp-room-active .mp-spectator-join:disabled{opacity:.35;cursor:not-allowed}
 .drawer-launch .mega-line2{font-weight:700;font-size:19px;line-height:1;letter-spacing:.4em;text-indent:.4em}
 .drawer-note{color:rgba(255,255,255,.55);font:400 12px/1.7 var(--ui-font);letter-spacing:.02em;align-self:end}
 .drawer-tools{min-height:0;display:flex;flex-direction:column;overflow:hidden}
-.drawer-tools .tools{display:flex!important;position:static!important;width:auto!important;min-width:0!important;flex:1 1 auto!important;opacity:1!important;transform:none!important;pointer-events:auto!important;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:#101210;box-shadow:none;padding:14px!important;overflow-y:auto}
+.drawer-tools .tools{display:flex!important;position:static!important;width:auto!important;min-width:0!important;min-height:0!important;height:100%!important;flex:1 1 auto!important;opacity:1!important;transform:none!important;pointer-events:auto!important;overflow-y:auto!important;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:#101210;box-shadow:none;padding:14px!important;overflow-y:auto}
 .drawer-tools .tools[hidden]{display:flex!important}
 .drawer-tools .tools .launch,.drawer-tools .tools .import-cta{font-size:15px}
 body.player-active .play-drawer{transform:translateX(112%)!important}
